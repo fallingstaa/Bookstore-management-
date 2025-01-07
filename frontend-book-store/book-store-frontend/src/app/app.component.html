@@ -1,0 +1,77 @@
+<div class="header">
+  <h1 class="store-name">Book Haven</h1>
+  <div class="cart">
+    <button class="cart-button" (click)="toggleCart()">🛒 Cart ({{ cart.length }})</button>
+  </div>
+</div>
+
+<div class="book-container">
+  <div *ngFor="let book of books" class="book-card">
+    <img [src]="book.imageUrl" alt="Book Cover" class="book-cover" />
+    <div class="book-details">
+      <h3 class="book-title">{{ book.title }}</h3>
+      <p class="book-author">by {{ book.author }}</p>
+      <p class="book-price">${{ book.price }}</p>
+
+      <!-- Add to Cart Button -->
+      <button class="add-to-cart" (click)="addToCart(book)">Add to Cart</button>
+
+      <!-- View Details Button -->
+      <button class="view-details" (click)="toggleDetails(book)">
+        {{ selectedBook === book ? 'Hide Details' : 'View Details' }}
+      </button>
+
+      <!-- Book details section with only Genre and Published Date when selected -->
+      <div *ngIf="selectedBook === book" class="book-detail-section">
+        <p class="book-genre"><strong>Genre:</strong> {{ book.genre }}</p>
+        <p class="book-published-date"><strong>Published Date:</strong> {{ book.publishedDate | date:'longDate' }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cart Section -->
+<div *ngIf="showCart" class="cart-items">
+  <h3>Your Cart</h3>
+  <div *ngIf="cart.length === 0">Your cart is empty.</div>
+  <div *ngFor="let item of cart" class="cart-item">
+    <img [src]="item.imageUrl" alt="Book Cover" class="cart-book-cover" />
+    <div class="cart-book-info">
+      <h4>{{ item.title }}</h4>
+      <p>{{ item.author }}</p>
+      <button class="remove-from-cart" (click)="removeFromCart(item)">Remove</button>
+    </div>
+  </div>
+
+  <!-- Total Price and Empty Cart Button -->
+  <div class="cart-summary">
+    <p>Total: ${{ getTotalPrice() }}</p>
+    <button class="empty-cart" (click)="emptyCart()">Empty Cart</button>
+  </div>
+
+  <!-- Checkout Section -->
+  <div *ngIf="!showReceipt" class="checkout-summary">
+    <h3>Checkout</h3>
+    <div *ngFor="let item of cart">
+      <p>{{ item.title }} - ${{ item.price }}</p>
+    </div>
+    <p><strong>Total: ${{ getTotalPrice() }}</strong></p>
+    <button class="proceed-to-checkout" (click)="checkout()">Confirm Checkout</button>
+  </div>
+</div>
+
+<!-- Receipt Section after Checkout -->
+<div *ngIf="showReceipt" class="checkout-receipt">
+  <h3>Receipt</h3>
+  <ul>
+    <li *ngFor="let item of cart">
+      {{ item.title }} - ${{ item.price }}
+    </li>
+  </ul>
+  <div>
+    <strong>Total: ${{ getTotalPrice() }}</strong>
+  </div>
+  <div class="thank-you">
+    Thank you for your purchase!
+  </div>
+</div>

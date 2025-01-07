@@ -1,0 +1,15 @@
+<div *ngIf="selectedBook; else noBook">
+  <!-- Display the book details if selectedBook is found -->
+  <h2>{{ selectedBook.title }}</h2>
+  <p>{{ selectedBook.author }}</p>
+  <p>{{ selectedBook.description }}</p>
+  <p>Price: ${{ selectedBook.price }}</p>
+  <img [src]="selectedBook.imageUrl" alt="Book Cover" />
+</div>
+
+<!-- Fallback if no book is found -->
+<ng-template #noBook>
+  <p>Book not found.</p>
+  <!-- Optionally, you can add a link to go back or redirect -->
+  <a routerLink="/">Go Back to Home</a>
+</ng-template>
